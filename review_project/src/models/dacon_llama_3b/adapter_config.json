@@ -1,0 +1,17 @@
+{
+  "auto_mapping": null,
+  "base_model_name_or_path": "Bllossom/llama-3.2-Korean-Bllossom-3B",
+  "inference_mode": true,
+  "num_attention_heads": 24,
+  "num_layers": 28,
+  "num_transformer_submodules": 1,
+  "num_virtual_tokens": 128,
+  "peft_type": "PROMPT_TUNING",
+  "prompt_tuning_init": "TEXT",
+  "prompt_tuning_init_text": "Your task is to transform the given obfuscated Korean review into a clear, correct, and natural-sounding Korean review that reflects its original meaning.:",
+  "revision": null,
+  "task_type": "CAUSAL_LM",
+  "token_dim": 3072,
+  "tokenizer_kwargs": null,
+  "tokenizer_name_or_path": "/home/review/model_file/llama-3.2-Korean-Bllossom-3B_768_best"
+}
