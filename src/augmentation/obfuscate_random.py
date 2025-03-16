@@ -3,8 +3,8 @@ import random
 import re
 from tqdm import tqdm
 
-combined_df = pd.read_csv('/home/yooyoung/dacon/replace_insert_combined.csv',encoding='utf-8-sig')
-train = pd.read_csv('/home/yooyoung/dacon/train.csv', encoding='utf-8-sig')
+combined_df = pd.read_csv('combined_df_path',encoding='utf-8-sig') # combined dataset load
+train = pd.read_csv('train_path', encoding='utf-8-sig') # train dataset load
 # 난독화 함수 정의
 def obfuscate_sentence(sentence, train):
     words = sentence.split()  # 문장 내 단어 분리
@@ -43,7 +43,7 @@ combined_df['obfuscated_sentence'] = [
 ]
 
 # 결과를 CSV 파일로 저장
-output_csv_path = "/home/yooyoung/dacon/obfuscated_insert_replace_random.csv"
+output_csv_path = "path"
 combined_df.to_csv(output_csv_path, encoding='utf-8-sig', index=False)
 
 # 저장 완료 메시지

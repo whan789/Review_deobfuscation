@@ -17,7 +17,7 @@ os.environ["PYTORCH_CUDA_ALLOC_CONF"] = "expandable_segments:True"
 os.environ["FLASH_ATTENTION"] = "1"
 
 # 데이터 로드
-train = pd.read_csv('/home/yooyoung/dacon/train_replace_insert_char.csv', encoding='utf-8-sig')
+train = pd.read_csv('train_path', encoding='utf-8-sig')
 train = train.drop(columns=['Unnamed: 0', 'ID'])  # id 컬럼 제거
 dataset = Dataset.from_pandas(train)
 
@@ -27,7 +27,7 @@ train_dataset = train_test_split['train']
 test_dataset = train_test_split['test']
 
 # 모델 로드
-model_name = "MLP-KTLim/llama-3-Korean-Bllossom-8B"
+model_name = "base_model"
 device = "cuda" if torch.cuda.is_available() else "cpu"
 
 # Tokenizer 설정
@@ -57,7 +57,7 @@ train_dataset = train_dataset.map(format_chat_template, batched=False, num_proc=
 test_dataset = test_dataset.map(format_chat_template, batched=False, num_proc=1)
 
 # 최적 하이퍼파라미터 저장 파일 경로
-BEST_PARAMS_FILE = "/home/yooyoung/dacon/best_hyperparams.json"
+BEST_PARAMS_FILE = "param_path"
 
 def objective(trial):
     global BEST_PARAMS_FILE  # 최적 파라미터 저장 경로
@@ -201,7 +201,7 @@ trainer = SFTTrainer(
 trainer.train()
 
 # 최종 모델 저장
-ADAPTER_MODEL = "/home/yooyoung/dacon/llama-3.2-Korean-Bllossom-8B_char_best_hyperparams"
+ADAPTER_MODEL = "adapter_path"
 trainer.model.save_pretrained(ADAPTER_MODEL)
 
 BASE_MODEL = "MLP-KTLim/llama-3-Korean-Bllossom-8B"
@@ -209,6 +209,6 @@ model = AutoModelForCausalLM.from_pretrained(BASE_MODEL, device_map='auto', torc
 model = PeftModel.from_pretrained(model, ADAPTER_MODEL, device_map='auto', torch_dtype=torch.float16)
 
 # 최적 모델 저장
-FINAL_MODEL_PATH = "/home/yooyoung/dacon/llama-3.2-Korean-Bllossom-8B_char_final"
+FINAL_MODEL_PATH = "best_model"
 model.save_pretrained(FINAL_MODEL_PATH)
 tokenizer.save_pretrained(FINAL_MODEL_PATH)

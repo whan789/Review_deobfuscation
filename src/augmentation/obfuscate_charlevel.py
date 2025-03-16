@@ -5,8 +5,8 @@ from tqdm import tqdm
 from collections import defaultdict
 
 # 데이터 로드
-combined_df = pd.read_csv('/home/yooyoung/dacon/df_insert_cleaned.csv', encoding='utf-8-sig')
-train = pd.read_csv('/home/yooyoung/dacon/train.csv', encoding='utf-8-sig')
+combined_df = pd.read_csv('combined_df_path', encoding='utf-8-sig') # combined_df dataset load
+train = pd.read_csv('train_path', encoding='utf-8-sig') # train dataset load
 
 def obfuscate_sentence_char(sentence, train):
     """
@@ -58,7 +58,7 @@ tqdm.pandas()
 combined_df['obfuscated_sentence'] = combined_df['sentence'].progress_apply(lambda x: obfuscate_sentence_char(x, train))
 
 # 결과를 CSV 파일로 저장
-output_csv_path = "/home/yooyoung/dacon/obfuscated_insert_random_char.csv"
+output_csv_path = "path" # saving path
 combined_df.to_csv(output_csv_path, encoding='utf-8-sig', index=False)
 
 print(f"난독화된 데이터가 저장되었습니다: {output_csv_path}")

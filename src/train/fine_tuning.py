@@ -11,7 +11,7 @@ import os
 # CUDA 디바이스 설정
 os.environ["CUDA_VISIBLE_DEVICES"] = "0"  # GPU ID를 설정합니다
 
-train = pd.read_csv('/home/review/data/combined_dataset.csv')
+train = pd.read_csv('train_path')
 
 dataset = Dataset.from_pandas(train)
 
@@ -21,7 +21,7 @@ train_dataset = train_test_split['train']
 test_dataset = train_test_split['test']
 
 # 모델 로드
-model_name = "Bllossom/llama-3.2-Korean-Bllossom-3B"
+model_name = "base_model"
 
 device = "cuda" if torch.cuda.is_available() else "cpu"
 
@@ -111,15 +111,15 @@ trainer = SFTTrainer(
 #  파인튜닝 시작
 trainer.train()
 
-ADAPTER_MODEL = "./model_file/llama-3.2-Korean-Bllossom-3B_prompt_aug"
+ADAPTER_MODEL = "adapter_path"
 
 trainer.model.save_pretrained(ADAPTER_MODEL)
 
-BASE_MODEL = "Bllossom/llama-3.2-Korean-Bllossom-3B"
+BASE_MODEL = "base_model"
 
 model = AutoModelForCausalLM.from_pretrained(BASE_MODEL, device_map='auto', torch_dtype=torch.float16)
 model = PeftModel.from_pretrained(model, ADAPTER_MODEL, device_map='auto', torch_dtype=torch.float16)
 
 # BASE_MODEL과 ADAPTER_MODEL이 통합된 상태로 저장
-model.save_pretrained("./model_file/llama-3.2-Korean-Bllossom-3B_prompt_finetuning_aug")
-tokenizer.save_pretrained("./model_file/llama-3.2-Korean-Bllossom-3B_prompt_finetuning_aug")
+model.save_pretrained("adapter_path")
+tokenizer.save_pretrained("adapter_path")

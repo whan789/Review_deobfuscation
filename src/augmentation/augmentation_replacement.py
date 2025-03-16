@@ -37,7 +37,7 @@ def random_masking_replacement(sentence, ratio=0.15):
 
 if __name__ == "__main__":
     # orig_train = pd.read_json('sts/datasets/klue-sts-v1.1_train.json')  # KLUE-STS 학습 데이터셋(JSON 형식) 로드
-    orig_train = pd.read_csv('/home/jinmin/data/train_filtered.csv')  # train 데이터셋 로드
+    orig_train = pd.read_csv('train_path')  # train 데이터셋 로드
 
     # Apply random masking replacement
     # 원본 데이터를 복사한 후, random_masking_replacement 함수를 적용한 뒤 증강

@@ -24,7 +24,7 @@ from tqdm import tqdm
 # CUDA 디바이스 설정
 os.environ["CUDA_VISIBLE_DEVICES"] = "0"  # GPU ID를 설정합니다
 
-train = pd.read_excel('/home/alfee050523/obfucation_gongmo/data/train_merged2.xlsx', dtype=str, engine='openpyxl')
+train = pd.read_excel('train_path', dtype=str, engine='openpyxl')
 train = train.drop(columns=["id"])  # id 컬럼 제거
 dataset = Dataset.from_pandas(train)
 
@@ -34,7 +34,7 @@ train_dataset = train_test_split['train']
 test_dataset = train_test_split['test']
 
 # 모델 로드
-model_name = "/home/alfee050523/obfucation_gongmo/llama-3.2-Korean-Bllossom-3B_768_best"
+model_name = "base_model"
 
 device = "cuda" if torch.cuda.is_available() else "cpu"
 
@@ -69,7 +69,7 @@ peft_config = PromptTuningConfig(
     prompt_tuning_init=PromptTuningInit.TEXT,
     num_virtual_tokens=512,
     prompt_tuning_init_text="Your task is to transform the given obfuscated Korean review into a clear, correct, and natural-sounding Korean review that reflects its original meaning.:",
-    tokenizer_name_or_path="/home/alfee050523/obfucation_gongmo/llama-3.2-Korean-Bllossom-3B_768_best",
+    tokenizer_name_or_path="tokenizer_path",
 )
 
 model = get_peft_model(model, peft_config)
@@ -120,15 +120,15 @@ trainer = SFTTrainer(
 #  파인튜닝 시작
 trainer.train()
 
-ADAPTER_MODEL = "/home/review/ksw/model_file/llama-3.2-Korean-Bllossom-3B_best_hyperparams_with_prompt_tuning"
+ADAPTER_MODEL = "adapter_path"
 
 trainer.model.save_pretrained(ADAPTER_MODEL)
 
-BASE_MODEL = "/home/review/model_file/llama-3.2-Korean-Bllossom-3B_768_best"
+BASE_MODEL = "base_model"
 
 model = AutoModelForCausalLM.from_pretrained(BASE_MODEL, device_map='auto', torch_dtype=torch.float16)
 model = PeftModel.from_pretrained(model, ADAPTER_MODEL, device_map='auto', torch_dtype=torch.float16)
 
 # BASE_MODEL과 ADAPTER_MODEL이 통합된 상태로 저장
-model.save_pretrained("/home/review/ksw/model_file/llama-3.2-Korean-Bllossom-3B_best_hyperparams_with_prompt_tuning_final")
-tokenizer.save_pretrained("/home/review/ksw/model_file/llama-3.2-Korean-Bllossom-3B_best_hyperparams_with_prompt_tuning_final")
+model.save_pretrained("best_model")
+tokenizer.save_pretrained("best_model")

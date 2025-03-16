@@ -13,11 +13,11 @@ import re
 os.environ["CUDA_VISIBLE_DEVICES"] = "2"  # GPU ID를 설정합니다
 
 # 모델 경로 확인
-FINETUNE_MODEL = "/home/jinmin/model_file/llama-3.2-Korean-Bllossom-3B_best_hyperparams_with_prompt_tuning_final_256" # 통합 모델
+FINETUNE_MODEL = "fintuned_model" 
 if not os.path.exists(FINETUNE_MODEL):
     raise FileNotFoundError(f"Fine-tuned model not found at {FINETUNE_MODEL}")
 
-BASE_MODEL = "/home/jinmin/model_file/llama-3.2-Korean-Bllossom-3B_768_best"
+BASE_MODEL = "base_model"
 
 # Base 모델 로드
 base_model = AutoModelForCausalLM.from_pretrained(
@@ -150,11 +150,12 @@ def restore_reviews_sequential(test_df, text_gen_pipeline, tokenizer=None):
 
     return restored_reviews
 
-target_test = pd.read_csv("/home/jinmin/data/filtered_test_by_length.csv", encoding='utf-8-sig')
+# 길이가 다른 데이터셋 로딩
+target_test = pd.read_csv("path", encoding='utf-8-sig')
 target_ids = target_test["ID"]
 
 # 데이터 로드
-test_file = "/home/jinmin/data/test.csv"
+test_file = "test_path"
 if not os.path.exists(test_file):
     raise FileNotFoundError(f"Test CSV file not found at {test_file}")
 test = pd.read_csv(test_file, encoding='utf-8-sig')
@@ -199,4 +200,4 @@ for key, value in tqdm(filtered_dict.items(), desc="Processing", unit="entry"):
 # 최종 데이터프레임 생성
 final_df = pd.DataFrame(output_data)
 
-final_df.to_csv("/home/jinmin/results/kiwi_3b.csv", index=False, encoding="utf-8-sig")
+final_df.to_csv("path", index=False, encoding="utf-8-sig")

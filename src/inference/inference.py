@@ -14,11 +14,11 @@ import re
 os.environ["CUDA_VISIBLE_DEVICES"] = "0"  # GPU ID를 설정합니다
 
 # 모델 경로 확인
-FINETUNE_MODEL = "/data/review/review_project/src/models/dacon_llama_8b" # 통합 모델
+FINETUNE_MODEL = "finetuned_model" # 통합 모델
 if not os.path.exists(FINETUNE_MODEL):
     raise FileNotFoundError(f"Fine-tuned model not found at {FINETUNE_MODEL}")
 
-BASE_MODEL = "MLP-KTLim/llama-3-Korean-Bllossom-8B"
+BASE_MODEL = "base_model"
 
 # 모델 및 토크나이저 로드 
 finetune_model = AutoModelForCausalLM.from_pretrained(
@@ -145,7 +145,7 @@ def restore_reviews_sequential(test_df, text_gen_pipeline, tokenizer=None):
     return restored_reviews
 
 # 데이터 로드
-test_file = '/home/jinmin/data/test.csv'
+test_file = 'test_path'
 if not os.path.exists(test_file):
     raise FileNotFoundError(f"Test CSV file not found at {test_file}")
 test = pd.read_csv(test_file, encoding='utf-8-sig')
@@ -158,7 +158,7 @@ restored_reviews = restore_reviews_sequential(
 )
 
 # 결과 저장
-sample = pd.read_csv('/home/jinmin/data/sample_submission.csv', encoding = 'utf-8-sig')
+sample = pd.read_csv('sample_path', encoding = 'utf-8-sig')
 test_list = restored_reviews
 sample['output'] = test_list
-sample.to_csv('/home/jinmin/results/llama_long9.csv', index=False, encoding='utf-8-sig')
+sample.to_csv('result_path', index=False, encoding='utf-8-sig')
